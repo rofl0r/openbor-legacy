@@ -1,0 +1,10 @@
+*~
+releases/*
+*.o
+~.elf
+.svn/
+*.tmp
+
+
+
+
