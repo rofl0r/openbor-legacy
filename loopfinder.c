@@ -40,22 +40,22 @@ stringptr* readfile(char* filename) {
 	size_t size = getfilesize(filename);
 	size_t bufpos = 0;
 	size_t bread = 0;
-	if(!size) return NULL;	
+	if(!size) return NULL;
 	f = fopen(filename, "r");
 	if(!f) return NULL;
-	//buf = malloc(size);	
+	//buf = malloc(size);
 	buf = new_string(size);
-	
+
 	if (!buf) goto FEXIT;
-	
+
 	while(bufpos < size) {
 		bread = fread(buf->ptr + bufpos, 1, 64*1024, f);
-		bufpos += bread;		
+		bufpos += bread;
 		if(!bread) {
 			printf(strerror(errno));
 			break;
-		}	
-	}	
+		}
+	}
 	FEXIT:
 	fclose(f);
 	return buf;
@@ -81,7 +81,7 @@ void searchBiggestRepeatingBlock(stringptr* buf) {
 			while(scanpos+samplesize < buf->size && buf->ptr[startpos+samplesize-1] == buf->ptr[scanpos+samplesize-1])
 				samplesize++;
 			scanpos++;
-			printf("#");				
+			printf("#");
 			} else {
 				scanpos++;
 			}
@@ -89,17 +89,17 @@ void searchBiggestRepeatingBlock(stringptr* buf) {
 		startpos++;
 	}
 	printf("\nlastfoundoffset: %d, lastfoundsamplesize: %d\n", lastfoundoffset, lastfoundsamplesize);
-	
+
 }
 
 void searchLoop(char* buf, size_t bufsize, size_t startpos, size_t minsize, size_t blocksize) {
 	size_t samplesize = minsize;
 	size_t save = 0;
 	size_t scanpos = 0;
-	
+
 	//align startpos to blocksize
 	startpos += startpos % blocksize;
-	
+
 	while(startpos < bufsize - samplesize) {
 		if (startpos % 1000 == 0)
 			printf("approaching startpos %d with samplesize %d\n", startpos, samplesize);
@@ -108,8 +108,8 @@ void searchLoop(char* buf, size_t bufsize, size_t startpos, size_t minsize, size
 		scanpos = startpos+minsize;
 		save = 0;
 		//scanning the buffer from scanpos till eof, comparing with the junk from startpos.
-		while(scanpos < bufsize - samplesize) {			
-			if(!memcmp(buf+startpos, buf+scanpos, samplesize)) {				
+		while(scanpos < bufsize - samplesize) {
+			if(!memcmp(buf+startpos, buf+scanpos, samplesize)) {
 				while(scanpos+samplesize < bufsize && startpos + samplesize < scanpos && !memcmp(buf+startpos+samplesize,buf+scanpos+samplesize,blocksize))
 					samplesize+=blocksize;
 				if(startpos + samplesize == scanpos || scanpos + samplesize == bufsize) {
@@ -124,7 +124,7 @@ void searchLoop(char* buf, size_t bufsize, size_t startpos, size_t minsize, size
 					samplesize = scanpos - startpos;
 					scanpos += save;
 				}
-			} else	
+			} else
 				scanpos+=blocksize;
 		}
 		if(save)
@@ -135,7 +135,7 @@ void searchLoop(char* buf, size_t bufsize, size_t startpos, size_t minsize, size
 	printf("no loops found :-/\n");
 }
 
-int checkWaveValid(WAVE_HEADER* wave) {	
+int checkWaveValid(WAVE_HEADER* wave) {
 	if(!memcmp((char*)wave->text_RIFF,"RIFF",4) &&
 	!memcmp((char*)wave->text_WAVE,"WAVE",4) &&
 	!memcmp((char*)wave->text_fmt,"fmt ",4) &&
@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
 		puts("need a valid filename as argv1, scanstartoffset as argv2, minimum matchsize in bytes as argv3");
 		return 1;
 	}
-	
+
 	buf = readfile(argv[1]);
 	startpos = atoi(argv[2]);
 	minsize = atoi(argv[3]);
@@ -175,18 +175,18 @@ int main(int argc, char** argv) {
 		datasize = buf->size - ((size_t) data - (size_t) buf->ptr);
 		if (data == buf->ptr)
 			printf("no valid WAVE file or compressed format. scanning whole file.\n");
-		else 
+		else
 			printf("skipping WAVE header of length %d\n", (size_t) data - (size_t) buf->ptr);
 	}
-	
+
 	if(wave && datasize % wave->blockalign != 0)
 	{
 		printf("error, filesize doesnt match blockalign!");
 		return 1;
 	}
-	
+
 	searchLoop(data, datasize, startpos, minsize, wave ? wave->blockalign: 1);
-	
+
 	free_string(buf);
 	return 0;
 }
