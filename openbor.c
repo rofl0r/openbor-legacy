@@ -86,19 +86,19 @@ const s_drawmethod plainmethod = {
 	NULL,			// table
 	NULL,			//fp
 	0,			// fillcolor
-	1,			//flag
-	-1,			// alpha
-	-1,			// remap
-	0,			//flipx
-	0,			//flipy
-	0,			//transbg
-	0,			//fliprotate
-	0,			//rotate
 	256,			//scalex
 	256,			//scaley
 	0,			//shiftx
 	0,			//centerx  //currently used only by gfxshadow, do not touch it
 	0			//centery
+	-1,			// alpha
+	-1,			// remap
+	0,			//rotate
+	1,			//flag
+	0,			//flipx
+	0,			//flipy
+	0,			//transbg
+	0,			//fliprotate
 };
 
 
