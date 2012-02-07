@@ -170,8 +170,8 @@ typedef struct {
 	int shiftx;
 	int centerx;		// shift centerx
 	int centery;		//shift centery
-	char alpha;
-	char remap;
+	signed char alpha;
+	signed char remap;
 	int rotate:11; // 360 degrees
 	int flag:1;
 	int flipx:1;
