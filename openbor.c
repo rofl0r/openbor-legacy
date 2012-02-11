@@ -931,20 +931,20 @@ static void execute_script_default(s_script_args* args, Script* dest_script) {
 	if(Script_IsInitialized(dest_script)) {
 		ScriptVariant_Init(&tempvar);
 		for(i = 0; i < s_script_args_membercount; i++) {
-			ScriptVariant_ChangeType(&tempvar, tuples[i].vt);
-			switch(tuples[i].vt) {
-				case VT_PTR:
-					tempvar.ptrVal = (VOID *) tuples[i].value;
-					break;
-				case VT_INTEGER:
-					tempvar.lVal = (LONG) tuples[i].value;
-					break;
-				case VT_EMPTY:
-					break;
-				default:
-					assert(0);
+			if(tuples[i].vt != VT_EMPTY) {
+				ScriptVariant_ChangeType(&tempvar, tuples[i].vt);
+				switch(tuples[i].vt) {
+					case VT_PTR:
+						tempvar.ptrVal = (VOID *) tuples[i].value;
+						break;
+					case VT_INTEGER:
+						tempvar.lVal = (LONG) tuples[i].value;
+						break;
+					default:
+						assert(0);
+				}
+				Script_Set_Local_Variant(names[i], &tempvar);
 			}
-			Script_Set_Local_Variant(names[i], &tempvar);
 		}
 		
 		Script_Execute(dest_script);
@@ -987,7 +987,7 @@ void execute_takedamage_script(entity * ent, entity * other, int force, int drop
 			       int jugglecost, int pauseadd) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
@@ -1002,7 +1002,7 @@ void execute_ondeath_script(entity * ent, entity * other, int force, int drop, i
 			    int jugglecost, int pauseadd) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
@@ -1016,7 +1016,7 @@ void execute_onfall_script(entity * ent, entity * other, int force, int drop, in
 			   int jugglecost, int pauseadd) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
@@ -1031,7 +1031,7 @@ void execute_didblock_script(entity * ent, entity * other, int force, int drop, 
 			     int jugglecost, int pauseadd) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
@@ -1045,7 +1045,7 @@ void execute_ondoattack_script(entity * ent, entity * other, int force, int drop
 			       int jugglecost, int pauseadd, int iWhich, int iAtkID) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
@@ -1066,7 +1066,7 @@ void execute_didhit_script(entity * ent, entity * other, int force, int drop, in
 			   int jugglecost, int pauseadd, int blocked) {
 	s_script_args script_args = init_script_args_default;
 	script_args.ent.value = (intptr_t) ent;
-	script_args.other.value = (intptr_t) ent;
+	script_args.other.value = (intptr_t) other;
 	script_args.force.value = force;
 	script_args.drop.value = drop;
 	script_args.type.value = type;
