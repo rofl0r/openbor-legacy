@@ -18476,7 +18476,8 @@ void execute_keyscripts() {
 		   && (player[p].newkeys || (keyscriptrate && player[p].keys) || player[p].releasekeys)) {
 			if(level) {
 				execute_level_key_script(p);
-				execute_entity_key_script(player[p].ent);
+				if(player[p].ent)
+					execute_entity_key_script(player[p].ent);
 			}
 			execute_key_script(p);
 			execute_key_script_all(p);
