@@ -6298,7 +6298,7 @@ void unload_levelorder() {
 	if(skipselect) {
 		for(i = 0; i < MAX_DIFFICULTIES; i++) {
 			for(j = 0; j < MAX_PLAYERS; j++)
-				freeAndNull((void**) skipselect[i][j]);
+				freeAndNull((void**) &((*skipselect)[i][j]));
 		}
 		freeAndNull((void**) &skipselect);
 	}
