@@ -313,7 +313,7 @@ void Parser_Decl_spec(Parser * pparser) {
 		Parser_Match(pparser);
 	} else if(Parser_Check(pparser, TOKEN_INT)) {
 		Parser_Match(pparser);
-	} else if(Parser_Check(pparser, TOKEN_LONG)) {
+	} else if(Parser_Check(pparser, TOKEN_s32)) {
 		Parser_Match(pparser);
 	} else if(Parser_Check(pparser, TOKEN_FLOAT)) {
 		Parser_Match(pparser);

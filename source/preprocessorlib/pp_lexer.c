@@ -354,7 +354,7 @@ s32 pp_lexer_GetTokenIdentifier(pp_lexer * plexer, pp_token * theNextToken) {
 	} else if(!strcmp(plexer->theTokenSource, "int")) {
 		MAKETOKEN(PP_TOKEN_INT);
 	} else if(!strcmp(plexer->theTokenSource, "long")) {
-		MAKETOKEN(PP_TOKEN_LONG);
+		MAKETOKEN(PP_TOKEN_s32);
 	} else if(!strcmp(plexer->theTokenSource, "register")) {
 		MAKETOKEN(PP_TOKEN_REGISTER);
 	} else if(!strcmp(plexer->theTokenSource, "return")) {
