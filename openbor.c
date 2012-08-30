@@ -3853,13 +3853,8 @@ int lcmHandleCommandCancel(ArgList * arglist, s_model *newchar, s_anim* newanim,
 //stringswitch_gen add lcm_cmdanim "faint"
 //stringswitch_gen add lcm_cmdanim "dodge"
 //stringswitch_gen add lcm_cmdanim "special"
-//stringswitch_gen add lcm_cmdanim "special1"
-//stringswitch_gen add lcm_cmdanim "special2"
-//stringswitch_gen add lcm_cmdanim "special3"
 //stringswitch_gen add lcm_cmdanim "jumpspecial"
 //stringswitch_gen add lcm_cmdanim "jumpattack"
-//stringswitch_gen add lcm_cmdanim "jumpattack2"
-//stringswitch_gen add lcm_cmdanim "jumpattack3"
 //stringswitch_gen add lcm_cmdanim "jumpforward"
 //stringswitch_gen add lcm_cmdanim "runjumpattack"
 //stringswitch_gen add lcm_cmdanim "runattack"
@@ -3882,15 +3877,10 @@ int lcmHandleCommandCancel(ArgList * arglist, s_model *newchar, s_anim* newanim,
 //stringswitch_gen add lcm_cmdanim "grabbedbackwalk"
 //stringswitch_gen add lcm_cmdanim "grabbedturn"
 //stringswitch_gen add lcm_cmdanim "grabattack"
-//stringswitch_gen add lcm_cmdanim "grabattack2"
 //stringswitch_gen add lcm_cmdanim "grabforward"
-//stringswitch_gen add lcm_cmdanim "grabforward2"
 //stringswitch_gen add lcm_cmdanim "grabbackward"
-//stringswitch_gen add lcm_cmdanim "grabbackward2"
 //stringswitch_gen add lcm_cmdanim "grabup"
-//stringswitch_gen add lcm_cmdanim "grabup2"
 //stringswitch_gen add lcm_cmdanim "grabdown"
-//stringswitch_gen add lcm_cmdanim "grabdown2"
 //stringswitch_gen add lcm_cmdanim "spawn"
 //stringswitch_gen add lcm_cmdanim "respawn"
 //stringswitch_gen add lcm_cmdanim "throw"
@@ -3910,7 +3900,6 @@ int lcmHandleCommandCancel(ArgList * arglist, s_model *newchar, s_anim* newanim,
 //stringswitch_gen add lcm_cmdanim "blockpain"
 //stringswitch_gen add lcm_cmdanim "duckattack"
 //stringswitch_gen add lcm_cmdanim "walkoff"
-
 //stringswitch_gen add lcm_cmdanim "attack"
 //stringswitch_gen add lcm_cmdanim "walk"
 //stringswitch_gen add lcm_cmdanim "up"
@@ -3931,7 +3920,8 @@ int lcmHandleCommandAnim(ArgList * arglist, s_model *newchar, s_anim **newanim, 
 	char lowercase_buf[32];
 	
 	*value = GET_ARGP(1);
-	
+	// if a command ends with a number, we set commandIndex to that number and remove it from the string
+	// this assumes that the ANI_ enum members are ordered like ATTACK1, ATTACK2, etc.
 	char_to_lower(lowercase_buf, *value, sizeof(lowercase_buf));
 	while(l > 0 && lowercase_buf[l - 1] >= '0' && lowercase_buf[l - 1] <= '9') {
 		endsWithNumber = 1;
@@ -3943,7 +3933,7 @@ int lcmHandleCommandAnim(ArgList * arglist, s_model *newchar, s_anim **newanim, 
 		if(commandIndex < 1)
 			commandIndex = 1;		
 	}
-
+	
 	// Create new animation
 	(*newanim) = alloc_anim();
 	if(!(*newanim)) {
@@ -4080,31 +4070,6 @@ int lcmHandleCommandAnim(ArgList * arglist, s_model *newchar, s_anim **newanim, 
 		stringcase(lcm_cmdanim, dodge):
 			(*ani_id) = ANI_DODGE;
 			break;
-		stringcase(lcm_cmdanim, special):
-		stringcase(lcm_cmdanim, special1):
-			(*ani_id) = ANI_SPECIAL;
-			(*newanim)->energycost[0] = 6;
-			break;
-		stringcase(lcm_cmdanim, special2):
-			(*ani_id) = ANI_SPECIAL2;
-			break;
-		stringcase(lcm_cmdanim, special3):
-		stringcase(lcm_cmdanim, jumpspecial):
-			(*ani_id) = ANI_JUMPSPECIAL;
-			break;
-		stringcase(lcm_cmdanim, jumpattack):
-			(*ani_id) = ANI_JUMPATTACK;
-			if(newchar->jumpheight == 4) {
-				(*newanim)->range[0] = 150;
-				(*newanim)->range[1] = 200;
-			}
-			break;
-		stringcase(lcm_cmdanim, jumpattack2):
-			(*ani_id) = ANI_JUMPATTACK2;
-			break;
-		stringcase(lcm_cmdanim, jumpattack3):
-			(*ani_id) = ANI_JUMPATTACK3;
-			break;
 		stringcase(lcm_cmdanim, jumpforward):
 			(*ani_id) = ANI_JUMPFORWARD;
 			break;
@@ -4169,54 +4134,6 @@ int lcmHandleCommandAnim(ArgList * arglist, s_model *newchar, s_anim **newanim, 
 			break;
 		stringcase(lcm_cmdanim, grabbedturn):
 			(*ani_id) = ANI_GRABBEDTURN;
-			break;
-		stringcase(lcm_cmdanim, grabattack):
-			(*ani_id) = ANI_GRABATTACK;
-			(*newanim)->attackone = 1;	// default to 1, attack one one opponent
-			break;
-		stringcase(lcm_cmdanim, grabattack2):
-			(*ani_id) = ANI_GRABATTACK2;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabforward):
-			// New grab attack for when pressing forward attack
-			(*ani_id) = ANI_GRABFORWARD;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabforward2):
-			// New grab attack for when pressing forward attack
-			(*ani_id) = ANI_GRABFORWARD2;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabbackward):
-			// New grab attack for when pressing backward attack
-			(*ani_id) = ANI_GRABBACKWARD;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabbackward2):
-			// New grab attack for when pressing backward attack
-			(*ani_id) = ANI_GRABBACKWARD2;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabup):
-			// New grab attack for when pressing up attack
-			(*ani_id) = ANI_GRABUP;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabup2):
-			// New grab attack for when pressing up attack
-			(*ani_id) = ANI_GRABUP2;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabdown):
-			// New grab attack for when pressing down attack
-			(*ani_id) = ANI_GRABDOWN;
-			(*newanim)->attackone = 1;
-			break;
-		stringcase(lcm_cmdanim, grabdown2):
-			// New grab attack for when pressing down attack
-			(*ani_id) = ANI_GRABDOWN2;
-			(*newanim)->attackone = 1;
 			break;
 		stringcase(lcm_cmdanim, spawn):
 			//  spawn/respawn works separately now
@@ -4298,6 +4215,43 @@ int lcmHandleCommandAnim(ArgList * arglist, s_model *newchar, s_anim **newanim, 
 			break;
 		stringcase(lcm_cmdanim, follow):
 			(*ani_id) = dyn_anims.animfollows[commandIndex - 1];
+			break;
+		stringcase(lcm_cmdanim, jumpattack):
+			(*ani_id) = ANI_JUMPATTACK + (commandIndex - 1);
+			if(commandIndex == 1 && newchar->jumpheight == 4) {
+				(*newanim)->range[0] = 150;
+				(*newanim)->range[1] = 200;
+			}
+			break;
+		stringcase(lcm_cmdanim, grabattack):
+			(*ani_id) = ANI_GRABATTACK + (commandIndex - 1);
+			(*newanim)->attackone = 1;	// default to 1, attack one one opponent
+			break;
+		stringcase(lcm_cmdanim, grabforward):
+			// New grab attack for when pressing forward attack
+			(*ani_id) = ANI_GRABFORWARD + (commandIndex - 1);
+			(*newanim)->attackone = 1;
+			break;
+		stringcase(lcm_cmdanim, grabbackward):
+			// New grab attack for when pressing backward attack
+			(*ani_id) = ANI_GRABBACKWARD + (commandIndex - 1);
+			(*newanim)->attackone = 1;
+			break;
+		stringcase(lcm_cmdanim, grabup):
+			// New grab attack for when pressing up attack
+			(*ani_id) = ANI_GRABUP + (commandIndex - 1);
+			(*newanim)->attackone = 1;
+			break;
+		stringcase(lcm_cmdanim, grabdown):
+			// New grab attack for when pressing down attack
+			(*ani_id) = ANI_GRABDOWN + (commandIndex - 1);
+			(*newanim)->attackone = 1;
+			break;
+		stringcase(lcm_cmdanim, jumpspecial):
+			commandIndex = 3; /* fall through to special */
+		stringcase(lcm_cmdanim, special):
+			(*ani_id) = ANI_SPECIAL + (commandIndex - 1);
+			if(commandIndex == 1) (*newanim)->energycost[0] = 6;
 			break;
 		stringcase(lcm_cmdanim, pain):
 			if(commandIndex < 11)
