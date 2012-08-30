@@ -192,8 +192,8 @@ s32 Token_InitFromPreprocessor(Token * ptoken, pp_token * ppToken) {
 		case PP_TOKEN_INT:
 			ptoken->theType = TOKEN_INT;
 			break;
-		case PP_TOKEN_s32:
-			ptoken->theType = TOKEN_s32;
+		case PP_TOKEN_LONG:
+			ptoken->theType = TOKEN_LONG;
 			break;
 		case PP_TOKEN_SIGNED:
 			ptoken->theType = TOKEN_SIGNED;
