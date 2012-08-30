@@ -13933,7 +13933,7 @@ int common_attack() {
 	aiattack = self->modeldata.aiattack & MASK_AIATTACK1;
 
 	switch (aiattack) {
-		case AIATTACK1_s32:
+		case AIATTACK1_LONG:
 		case AIATTACK1_MELEE:
 		case AIATTACK1_NOATTACK:
 			return 0;

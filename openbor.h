@@ -172,7 +172,7 @@
 
 // A.I. attack1, affect attacking style
 #define     AIATTACK1_NORMAL      0	// Current default style
-#define     AIATTACK1_s32        0x00000001	// Long range first
+#define     AIATTACK1_LONG        0x00000001	// Long range first
 #define     AIATTACK1_MELEE       0x00000002	// Melee attack first
 #define     AIATTACK1_NOATTACK    0x00000004	// dont attack at all
 #define     MASK_AIATTACK1        0x0000FFFF
